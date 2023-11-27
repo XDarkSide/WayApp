@@ -27,17 +27,17 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">Add Course</h4>
+                    <h4 class="modal-title">Add goal</h4>
                     <button type="button" class="close" data-dismiss="modal" @onclick="CloseModal">&times;</button>
                 </div>
                 <div class="modal-body">
                     <form>
                         <div class="form-group">
-                            <label for="courseName">Course Name:</label>
+                            <label for="courseName">Name:</label>
                             <input id="courseName" @bind="newCourse.Name" class="form-control" placeholder="Course Name" />
                         </div>
                         <div class="form-group">
-                            <label for="endDate">End Date:</label>
+                            <label for="endDate">Deadline:</label>
                             <input id="endDate" @bind="newCourse.EndDate" class="form-control" type="date" />
                         </div>
                         <div class="form-group">
@@ -64,13 +64,12 @@
         <tr>
             <th>Name</th>
             <th>Deadline</th>
-            <th>Days Left</th>
+            <th>Days left</th>
             <th>Duration</th>
             <th>Progress</th>
-            <th>Progress for today</th>
+            <th>Progress for today (h/m)</th>
             <th>%</th>
             <th>Study Time Needed</th>
-            <th>Progress Log</th>
         </tr>
     </thead>
     <tbody>
@@ -78,9 +77,9 @@
         {
             <tr>
                 <td>@course.Name</td>
-                <td>@course.EndDate.ToString("MM/dd/yyyy HH:mm")</td>
+                <td>@course.EndDate.ToString("MM/dd/yyyy")</td>
                 <td>@DaysLeft(course)</td>
-                <td>@course.DurationHours hours @course.DurationMinutes minutes</td>
+                    <td>@course.DurationHours hours @course.DurationMinutes minutes</td>
                 <td>
                     <progress max="@TotalDurationInMinutes(course)" value="@CompletedDurationInMinutes(course)" class="progress"></progress>
                 </td>
