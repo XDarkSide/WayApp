@@ -19,6 +19,28 @@
 </div>
 
 <div class="container">
+
+    @if (confirmDelete)
+    {
+        <div class="modal" style="display: @(confirmDelete ? "block" : "none")">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Підтвердження видалення</h4>
+                        <button type="button" class="close" data-dismiss="modal" @onclick="CancelDelete">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Ви впевнені, що хочете видалити цей курс?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal" @onclick="CancelDelete">Скасувати</button>
+                        <button type="button" class="btn btn-danger" @onclick="@( () => ConfirmDelete(courseToDelete) )">Видалити</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
 @if (showModal)
 {
     <!-- Modal for adding course -->
@@ -147,7 +169,30 @@
     Course newCourse = new Course();
     bool showModal = false;
     bool showLogsModal = false;
+    bool confirmDelete = false;
     Course selectedCourse;
+    Course courseToDelete;
+
+
+    async Task DeleteCourse(Course course)
+    {
+        courseToDelete = course;
+        confirmDelete = true;
+    }
+
+    void ConfirmDelete(Course course)
+    {
+        courses.Remove(course);
+        courseToDelete = null;
+        confirmDelete = false;
+        UpdateCourseData();
+    }
+
+    void CancelDelete()
+    {
+        courseToDelete = null;
+        confirmDelete = false;
+    }
 
     void CloseModal()
     {
@@ -195,12 +240,6 @@
     {
         await LoadFromLocalStorage();
         StateHasChanged(); // Оновлюємо компоненти після завантаження даних
-    }
-
-    async Task DeleteCourse(Course course)
-    {
-        courses.Remove(course);
-        await UpdateCourseData();
     }
 
     async Task SaveToLocalStorage()
